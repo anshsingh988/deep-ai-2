@@ -1,0 +1,37 @@
+name: DEEP AI APK Compiler Matrix
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Source Code
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Install Buildozer Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev libsqlite3-0 text-renderer lld libgomp1
+        pip3 install --user --upgrade buildozer cython virtualenv
+
+    - name: Build Android APK with Buildozer Matrix
+      run: |
+        export PATH=$PATH:~/.local/bin
+        buildozer android debug
+
+    - name: Upload Finished DEEP AI APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: DEEP_AI_Package
+        path: bin/*.apk
