@@ -31,7 +31,7 @@ jobs:
         buildozer android debug
 
     - name: Upload Finished DEEP AI APK
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: DEEP_AI_Package
         path: bin/*.apk
